@@ -76,7 +76,7 @@ const Navigation = () => {
                 <Link className='nav-link' to='/shop' style={pathname === '/shop' ? {'border' : `1px solid ${borderColor}`}: {'border': 'none'}}>
                     SHOP
                 </Link>
-                <Link className='nav-link' to='/sign-in' style={pathname === '/sign-in' ? {'border': `1px solid ${borderColor}`}: {'border': 'none'}}>
+                <Link className='nav-link' to='/authintaction' style={pathname === '/authintaction' ? {'border': `1px solid ${borderColor}`}: {'border': 'none'}}>
                     SING IN
                 </Link>
                 <label className="switch">

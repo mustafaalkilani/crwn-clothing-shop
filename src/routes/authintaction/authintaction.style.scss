@@ -1,0 +1,15 @@
+.authintaction-container {
+    display: flex;
+    justify-content: space-between;
+    width: 900px;
+    margin: 30px auto;
+}
+
+@media screen and (max-width: 600px) {
+    .authintaction-container {
+        flex-direction: column;
+        align-items: center;
+        width: auto;
+        margin: 0;
+    }
+}

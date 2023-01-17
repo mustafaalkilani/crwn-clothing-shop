@@ -9,12 +9,11 @@
     background-color: black;
     color: white;
     text-transform: uppercase;
-    font-family: 'Open Sans Condensed';
-    font-weight: bolder;
     border: none;
     cursor: pointer;
     display: flex;
     justify-content: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   
     &:hover {
       background-color: white;
@@ -25,6 +24,7 @@
     &.google-sign-in {
       background-color: #4285f4;
       color: white;
+      font-size: 0.84rem;
   
       &:hover {
         background-color: #357ae8;
