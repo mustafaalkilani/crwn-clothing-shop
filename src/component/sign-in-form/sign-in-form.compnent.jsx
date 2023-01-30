@@ -1,10 +1,12 @@
-import { signInWithGooglePopup, createUserDocumentFromAuth, signInAuthUserWithEmailAndPassword } from '../../utils/firebase/firebase.utils';
-
-import Button from '../button/button.component';
-import './form-input.style.scss';
-import FormInput from '../from-input/form-input.component';
-
 import { Fragment, useState } from 'react';
+
+import { signInWithGooglePopup, signInAuthUserWithEmailAndPassword } from '../../utils/firebase/firebase.utils';
+
+import Button, {buttonTypeClassName} from '../button/button.component';
+import {Group, ButtonsContainer} from './form-input.style';
+import FormInput from '../from-input/form-input.component';
+import { useNavigate } from 'react-router-dom';
+
 
 const defaultInputValues = {
     'email': '',
@@ -15,6 +17,7 @@ const SignInForm = () => {
     const [inputValue, setInputValue] = useState(defaultInputValues);
     const {email, password} = inputValue;
     
+    const navigate = useNavigate();
 
     const InputFileds = [
         {
@@ -34,13 +37,11 @@ const SignInForm = () => {
             'len': '8',
         },
     ]
-    
 
     const logGoogleUser = async () => {
-        const { user } = await signInWithGooglePopup();
-        await createUserDocumentFromAuth(user);
+        await signInWithGooglePopup();
+        navigate('/shop');
     }
-
 
     const resetFromFileds = () => {
         setInputValue(defaultInputValues);
@@ -48,9 +49,9 @@ const SignInForm = () => {
     const handelSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await signInAuthUserWithEmailAndPassword(email, password);
-            console.log(response);
+            await signInAuthUserWithEmailAndPassword(email, password);
             resetFromFileds();
+            navigate('/shop');
         }catch (error) {
             switch(error.code) {
                 case 'auth/user-not-found':
@@ -75,7 +76,7 @@ const SignInForm = () => {
             <h2>I already have an account</h2>
             <span>Sign in with your email and passowrd</span>
             <form onSubmit={handelSubmit}>
-            <div className="group">
+            <Group>
                 {
                     InputFileds.map(({id, label, name, type, value, len}) => {
                         return (
@@ -85,11 +86,11 @@ const SignInForm = () => {
                         )
                     })
                 }
-            </div> 
-            <div className='buttons-container'>
+            </Group> 
+            <ButtonsContainer className='buttons-container'>
                 <Button type='submit'>Sign IN</Button>
-                <Button type='button' buttonType='google' onClick={logGoogleUser}>Sign In with google</Button>
-            </div>
+                <Button type='button' buttonType={buttonTypeClassName.google} onClick={logGoogleUser}>Sign In with google</Button>
+            </ButtonsContainer>
             </form>
         </div>
     )

@@ -1,15 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import reportWebVitals from './reportWebVitals';
+
 import './index.scss';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { UserProvider } from './component/context/user.context';
+import { CategoriesProvider } from './component/context/categories.context';
+import { CartDropdownProvider } from './component/context/cart-dorpdown.context';
+import { WebsiteThemeProvider } from './component/context/theme-color.context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />  
+    <WebsiteThemeProvider>
+        <UserProvider>
+          <CategoriesProvider>
+            <CartDropdownProvider>
+                <App />  
+            </CartDropdownProvider>
+          </CategoriesProvider>
+        </UserProvider>
+      </WebsiteThemeProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

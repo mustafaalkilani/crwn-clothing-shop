@@ -1,10 +1,10 @@
 import CategoryItem from '../category-item/category-item.component'
 
-import './category-menu.style.scss';
+import {CategoriesContainer} from './category-menu.style';
 
 const CategoryMenu = ({ categories }) => {
     return (
-        <div className='categories-container'>
+        <CategoriesContainer>
             {
                 categories.map(({ title, id, imageUrl }) => {
                     return (
@@ -12,7 +12,7 @@ const CategoryMenu = ({ categories }) => {
                     )
                 })
             }
-        </div>
+        </CategoriesContainer>
     )
 }
 

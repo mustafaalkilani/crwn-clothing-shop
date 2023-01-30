@@ -1,8 +1,8 @@
 import { Fragment, useState } from "react"
-
+import { useNavigate } from 'react-router-dom';
 import { createAuthUserWithEmailAndPassowrd, createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
 import FormInput from "../from-input/form-input.component";
-import './sign-up-form.style.scss';
+import {ButtonsContainer, H2, SignUpContainer} from './sign-up-form.style';
 import Button from "../button/button.component";
 
 const defalutFormFileds = {
@@ -16,6 +16,7 @@ const defalutFormFileds = {
 const SignUpFrom = () => {
     const [formFiled, setFormFiled] = useState(defalutFormFileds);
     const {displayName, email, password, confirmPassword} = formFiled;
+    const navigate = useNavigate();
 
     const inputFileds = [
         {
@@ -52,8 +53,6 @@ const SignUpFrom = () => {
         },
     ]
     
-    // console.log(formFiled);
-
     const resetFromFileds = () => {
         setFormFiled(defalutFormFileds)
     }
@@ -69,6 +68,7 @@ const SignUpFrom = () => {
             const { user } = await createAuthUserWithEmailAndPassowrd(email, password);
             await createUserDocumentFromAuth(user, { displayName });
             resetFromFileds();
+            navigate('/shop');
         }catch (error) {
             if(error.code === 'auth/email-already-in-use') {
                 alert('Cannot create user, Email already in use')
@@ -83,8 +83,8 @@ const SignUpFrom = () => {
         setFormFiled({...formFiled, [name]: value});
     }
     return(
-        <div className="sign-up-container">
-            <h2>I don't have an account?</h2>
+        <SignUpContainer>
+            <H2>I don't have an account?</H2>
             <span>Sign up with your email and password</span>
             <form onSubmit={handelSubmit}>
                 {
@@ -96,9 +96,11 @@ const SignUpFrom = () => {
                         )
                     })
                 }
-                <Button type="submit" >Sign Up</Button>
+                <ButtonsContainer>
+                    <Button type="submit" >Sign Up</Button>
+                </ButtonsContainer>
             </form>
-        </div>
+        </SignUpContainer>
     )
 }
 

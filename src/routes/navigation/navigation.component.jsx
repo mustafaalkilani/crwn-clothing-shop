@@ -1,8 +1,17 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
-import { Fragment, useState, useEffect } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import { Fragment, useState, useEffect,useContext } from "react";
+
+import CartIcon from "../../component/cart/cart.component";
+import CartDropdown from "../../component/cart-dropdown/cart-dorpdown.component";
+
+import { WebsiteThemeContext } from "../../component/context/theme-color.context";
+import { UserContext } from "../../component/context/user.context";
+import { SignOutUser } from "../../utils/firebase/firebase.utils";
+import { CartDropdownContext } from "../../component/context/cart-dorpdown.context";
 
 import {ReactComponent as Crown} from '../../assests/crown.svg';
-import './navigation.style.scss';
+
+import {NavigationContainer, LogoContainer, NavLinksContainer, NavLink, Switch, SwitchInput, Slider, LightDarkModeIcon} from './navigation.style';
 
 const Navigation = () => {
     const [moonSunIcon, setMoonSunIcon] = useState('fa-sun');
@@ -10,81 +19,67 @@ const Navigation = () => {
     
     const location = useLocation();
     const {pathname} = location;
+    const {theme, setTheme} = useContext(WebsiteThemeContext);
 
     let borderColor = '';
 
+    const {currentUser} = useContext(UserContext);
+    const {isOpen} = useContext(CartDropdownContext);
+
     useEffect(() => {
       const currentTheme = localStorage.getItem("theme");
-      if (currentTheme === "black") {
+      if (currentTheme === "dark") {
         handleToggle();
         document.querySelector('input[type="checkbox"]').checked = true;
       }
     }, []);
-  
-    useEffect(() => {
-      if(location.pathname === '/' && document.body.style.color === "rgb(255, 255, 255)") {
-          document.querySelectorAll('.category-body-container').forEach(containerBody => {
-          containerBody.style.backgroundColor = 'rgb(0, 0, 0)';
-          containerBody.style.color = 'rgb(255, 255, 255)';
-        });
-      }
-    }, [location]);
-
+    
     const handleToggle = () => {
       if (moonSunIcon === "fa-sun") {
         setMoonSunIcon("fa-moon");
         setMoonSunTransaction("fa-sun-checked");
-        document.body.style.backgroundColor = "rgb(33, 33, 33)";
-        if (document.querySelectorAll('.category-body-container')) {
-            document.body.style.color = "rgb(255, 255, 255)";
-            document.querySelectorAll('.category-body-container').forEach(containerBody => {
-            containerBody.style.backgroundColor = 'rgb(0, 0, 0)';
-            containerBody.style.color = 'rgb(255, 255, 255)';
-          });
-        }
-        document.querySelectorAll(".nav-link").forEach(link => {
-        link.style.color = "rgb(255, 255, 255)";
-        });
-        borderColor = 'rgb(255, 255, 255)'
-        localStorage.setItem("theme", "black");
+        borderColor = 'rgb(255, 255, 255)';
+        setTheme('dark')
       } else {
         setMoonSunIcon("fa-sun");
         setMoonSunTransaction("");
-        document.body.style.backgroundColor = "whitesmoke";
-        if (document.querySelectorAll('.category-body-container')) {
-            document.body.style.color = "rgb(0, 0, 0)";
-            document.querySelectorAll('.category-body-container').forEach(containerBody => {
-            containerBody.style.backgroundColor = 'rgb(255, 255, 255)';
-            containerBody.style.color = 'rgb(0, 0, 0)';
-          });
-        }
-        document.querySelectorAll(".nav-link").forEach(link => {
-        link.style.color = "rgb(0, 0, 0)";
-        });
-        borderColor = 'rgb(0, 0, 0)'
-        localStorage.setItem("theme", "white");
+        borderColor = 'rgb(0, 0, 0)';
+        setTheme('white')
       }
     };
-
     return (
       <Fragment>
-        <div className="navigation">
-            <Link className="logo-container" to='/'>
+        <NavigationContainer>
+            <LogoContainer to='/'>
                 <Crown className='logo'/>
-            </Link>
-            <div className="nav-links-container">
-                <Link className='nav-link' to='/shop' style={pathname === '/shop' ? {'border' : `1px solid ${borderColor}`}: {'border': 'none'}}>
+            </LogoContainer>
+            <NavLinksContainer>
+              <NavLink to='/'  style={{'border': `${pathname === '/' ? `1px solid ${borderColor}`: 'none'}`, 'color': `${theme === 'dark' ? 'rgb(255, 255, 255)': 'rgb(0, 0, 0)'}`}}>
+                HOME
+              </NavLink>
+                <NavLink to='/shop'  style={{'border': `${pathname === '/shop' ? `1px solid ${borderColor}`: 'none'}`, 'color': `${theme === 'dark' ? 'rgb(255, 255, 255)': 'rgb(0, 0, 0)'}`}}>
                     SHOP
-                </Link>
-                <Link className='nav-link' to='/authintaction' style={pathname === '/authintaction' ? {'border': `1px solid ${borderColor}`}: {'border': 'none'}}>
+                </NavLink>
+                {
+                currentUser ? (
+                  <NavLink as='span' onClick={SignOutUser}>SIGN OUT</NavLink>
+                ): (
+                  <NavLink to='/authintaction' style={{'border': `${pathname === '/authintaction' ? `1px solid ${borderColor}`: 'none'}`, 'color': `${theme === 'dark' ? 'rgb(255, 255, 255)': 'rgb(0, 0, 0)'}`}}>
                     SING IN
-                </Link>
-                <label className="switch">
-                  <input type="checkbox" onClick={() => handleToggle()}/>
-                  <span className="slider round"><i className={`fa-solid ${moonSunIcon} ${moonSunTranaction}`}></i></span>
-                </label>
-            </div>
-        </div>
+                </NavLink>
+                )
+                }
+                <Switch>
+                  <SwitchInput type="checkbox" onClick={() => handleToggle()}/>
+                  <Slider><LightDarkModeIcon className={`fa-solid ${moonSunIcon} ${moonSunTranaction}`}></LightDarkModeIcon></Slider>
+                </Switch>
+                <CartIcon />
+            </NavLinksContainer>
+            {
+              isOpen === 'open' ? <CartDropdown />: null
+            }
+            
+        </NavigationContainer>
         <Outlet/>
       </Fragment>
     );
