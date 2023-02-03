@@ -4,11 +4,17 @@ import { CartDropdownContext } from '../../component/context/cart-dorpdown.conte
 import CheckOutItem from '../../component/checkout-item/checkout-item.component';
 import {CheckOutContainer, CheckOutHeader, HeaderBlock, Total} from './checkout.style';
 
+import PaymentForm from '../../component/payment-form/payment-form.compnent';
+import { useEffect } from 'react';
 
 const CheckOut = () => {
-    const {cartItems} = useContext(CartDropdownContext);
+    const {cartItems, setTotal} = useContext(CartDropdownContext);
 
     let total = 0;
+
+    useEffect(() => {
+        setTotal(total);
+    }, [cartItems])
     return (
         <CheckOutContainer>
             <CheckOutHeader>
@@ -35,6 +41,7 @@ const CheckOut = () => {
             )
             })}
             <Total>Total: ${total}</Total>
+            <PaymentForm />
         </CheckOutContainer>
     );
 }

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const CheckoutItemContainer = styled.div`
-  width: 100%;
+  width: 95%;
   display: flex;
   min-height: 100px;
   border-bottom: 1px solid darkgrey;

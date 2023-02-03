@@ -17,6 +17,9 @@ export const CardButton = styled(Button)`
   &:active {
     transform: scale(0.98);
   }
+  @media screen and (max-width: 600px) {
+    display: flex;
+  }
 `
 
 export const ProductCardContainer = styled.div`

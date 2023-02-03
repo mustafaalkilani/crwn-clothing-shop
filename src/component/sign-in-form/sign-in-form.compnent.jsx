@@ -1,22 +1,23 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useContext } from 'react';
 
 import { signInWithGooglePopup, signInAuthUserWithEmailAndPassword } from '../../utils/firebase/firebase.utils';
 
 import Button, {buttonTypeClassName} from '../button/button.component';
+import { HandelFormContext } from '../context/handel-form-errors.context';
 import {Group, ButtonsContainer} from './form-input.style';
 import FormInput from '../from-input/form-input.component';
 import { useNavigate } from 'react-router-dom';
+import  HandelErrorElement  from '../handel-form-input-errors/handel-sign-in-errors.component';
 
 
 const defaultInputValues = {
     'email': '',
     'password': ''
 }
-
 const SignInForm = () => {
     const [inputValue, setInputValue] = useState(defaultInputValues);
     const {email, password} = inputValue;
-    
+    const {error, setError, setErrorType} = useContext(HandelFormContext);    
     const navigate = useNavigate();
 
     const InputFileds = [
@@ -55,12 +56,24 @@ const SignInForm = () => {
         }catch (error) {
             switch(error.code) {
                 case 'auth/user-not-found':
-                    alert('user not found');
-                    break
+                    setError(true);
+                    setErrorType('User Not Found!');
+                    break;    
                 case 'auth/wrong-password':
-                    alert('wrong email or password !');
+                    setError(true);
+                    setErrorType('Wrong Email Or Password!');
+                    break
+                case 'auth/network-request-failed':
+                    setError(true);
+                    setErrorType('Check Your Internet!');
+                    break
+                case 'auth/too-many-requests':
+                    setError(true);
+                    setErrorType('Too many failed attempts!');
                     break
                 default:
+                    setError(true);
+                    setErrorType('Please Try Again Later!');
                     console.log(error.message);
 
             }
@@ -75,6 +88,7 @@ const SignInForm = () => {
         <div className='sign-up-container'>
             <h2>I already have an account</h2>
             <span>Sign in with your email and passowrd</span>
+            {error && < HandelErrorElement />}
             <form onSubmit={handelSubmit}>
             <Group>
                 {

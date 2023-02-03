@@ -1,9 +1,11 @@
-import { Fragment, useState } from "react"
-import { useNavigate } from 'react-router-dom';
+import { Fragment, useState, useContext } from "react"
 import { createAuthUserWithEmailAndPassowrd, createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
+import { HandelFormContext } from "../context/handel-form-errors.context"; 
 import FormInput from "../from-input/form-input.component";
 import {ButtonsContainer, H2, SignUpContainer} from './sign-up-form.style';
 import Button from "../button/button.component";
+import CreatedAccount from "../handel-form-input-errors/created-account.compnent";
+import { useNavigate } from "react-router-dom";
 
 const defalutFormFileds = {
     'displayName': '',
@@ -15,9 +17,10 @@ const defalutFormFileds = {
 
 const SignUpFrom = () => {
     const [formFiled, setFormFiled] = useState(defalutFormFileds);
+    const [localCreatedAccount, setLocalCreatedAccount] = useState(false);
     const {displayName, email, password, confirmPassword} = formFiled;
+    const {setCreatedAccount, setCreatedAccountError} = useContext(HandelFormContext);
     const navigate = useNavigate();
-
     const inputFileds = [
         {
             'id': '1',
@@ -60,7 +63,8 @@ const SignUpFrom = () => {
     const handelSubmit = async (event) => {
         event.preventDefault();
         if(password !== confirmPassword) {
-            alert('Password do not match');
+            setCreatedAccount(true);
+            setCreatedAccountError('passwords don\'t match!');
             return;
         }
 
@@ -68,10 +72,12 @@ const SignUpFrom = () => {
             const { user } = await createAuthUserWithEmailAndPassowrd(email, password);
             await createUserDocumentFromAuth(user, { displayName });
             resetFromFileds();
+            setLocalCreatedAccount(true);
             navigate('/shop');
         }catch (error) {
             if(error.code === 'auth/email-already-in-use') {
-                alert('Cannot create user, Email already in use')
+                setCreatedAccount(true);
+                setCreatedAccountError('Eamil already in use!');
             }
             console.log(error.message);
         }     
@@ -85,6 +91,7 @@ const SignUpFrom = () => {
     return(
         <SignUpContainer>
             <H2>I don't have an account?</H2>
+            {localCreatedAccount && <CreatedAccount msg={'Account Created!'}/>}
             <span>Sign up with your email and password</span>
             <form onSubmit={handelSubmit}>
                 {

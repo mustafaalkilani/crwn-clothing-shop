@@ -23,7 +23,8 @@ const CheckOutItem = ({cartItem}) => {
     const handelRemoveElement = (product) => {
         const selectedItem = cartItems.find((item) => item.id === product.id);
         if(selectedItem) {
-            return setCartItems(cartItems.filter((item) => item.id !== product.id));
+            const removeFromCart = cartItems.filter((item) => item.id !== product.id);
+            setCartItems(removeFromCart);
         }
     }
 

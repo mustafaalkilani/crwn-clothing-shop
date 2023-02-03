@@ -1,4 +1,4 @@
-import {BaseButton, GoogleSignInButton, InvertedButton} from './button.style';
+import {BaseButton, GoogleSignInButton, InvertedButton, ButtonSpinner} from './button.style';
 
 export const buttonTypeClassName = {
     'base': 'base',
@@ -15,10 +15,10 @@ const ButtonTypeHandel = (buttonType = buttonTypeClassName.base) => (
     }[buttonType]
 );
 
-const Button = ({children, buttonType, ...otherProps}) => {
+const Button = ({children, buttonType, isLoading, ...otherProps}) => {
     const CustomButton = ButtonTypeHandel(buttonType); 
     return(
-        <CustomButton {...otherProps}>{children}</CustomButton>
+        <CustomButton disabled={isLoading} {...otherProps}>{isLoading ? <ButtonSpinner /> :children}</CustomButton>
     )
 }
 

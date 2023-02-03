@@ -10,6 +10,7 @@ export const CategoryContainer = styled.div`
   border: 1px solid black;
   margin: 0 7.5px 15px;
   overflow: hidden;
+  margin-top: 25px;
 
   &:hover {
     cursor: pointer;

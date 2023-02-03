@@ -6,6 +6,7 @@ export const AuthintactionContainer = styled.div`
     justify-content: space-between;
     width: 900px;
     margin: 30px auto;
+    position: relative;
     @media screen and (max-width: 600px) {
         flex-direction: column;
         align-items: center;
