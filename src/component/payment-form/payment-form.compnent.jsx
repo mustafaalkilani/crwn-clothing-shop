@@ -1,4 +1,4 @@
-import { CardElement, useStripe, useElements, PaymentElement} from "@stripe/react-stripe-js";
+import { CardElement, useStripe, useElements} from "@stripe/react-stripe-js";
 import { useState, useContext } from "react";
 
 import { UserContext } from "../context/user.context";
