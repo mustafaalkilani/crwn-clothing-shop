@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const ContentCatgoryContainer = styled.div`
     padding: 0px 100px;
+    margin-top: 50px;
     @media screen and (max-width: 600px) {
         padding: 0;
     }
